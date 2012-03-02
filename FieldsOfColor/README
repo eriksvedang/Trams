@@ -1,0 +1,4 @@
+- Instructions for 'Fields of Color' -
+
+Made with Ruby Processing, run from the command line with rp5.
+The code in the file 'in.txt' will be run for each colored square (field) in the window. All ruby processing commands should work in there.
