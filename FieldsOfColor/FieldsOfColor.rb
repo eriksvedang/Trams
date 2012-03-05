@@ -1,8 +1,8 @@
 # Fields of Color by Erik Svedäng Mars 1, 2012
 
-$Field_w = 50
-$Field_h = 50
-$margin = 25
+$Field_w = 25
+$Field_h = 25
+$Margin = 25
 $Infile = "in.txt"
 
 class Fieldsofcolor < Processing::App
@@ -29,15 +29,15 @@ class Fieldsofcolor < Processing::App
   end
   
   def create_fields
-    x = y = $margin
+    x = y = $Margin
     @fields = []
-    while(x + $Field_w <= width - $margin)
-      while(y + $Field_h <= height - $margin)
+    while(x + $Field_w <= width - $Margin)
+      while(y + $Field_h <= height - $Margin)
         @fields.push(Field.new(x, y))
         y += $Field_h
       end
       x += $Field_w
-      y = $margin
+      y = $Margin
     end
   end
   
@@ -54,6 +54,9 @@ class Fieldsofcolor < Processing::App
       load_code()
     end
   end
+  
+  # Field class is inside main class to access the RP5 functions directly 
+  # (could use $app instead)
   
   class Field
 
