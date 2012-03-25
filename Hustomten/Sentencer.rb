@@ -17,7 +17,11 @@ def get_pattern(tokens)
   elsif is_pos == 1
     return :define_class, tokens[0], tokens[2]
   elsif has_pos == 1
-    return :define_component, tokens[0], tokens[2]
+    count = tokens[2].to_s.to_i
+    if count == nil
+      count = 1
+    end
+    return :define_component, tokens[0], count, tokens[3]
   else
     return :dont_understand
   end

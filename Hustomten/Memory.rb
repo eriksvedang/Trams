@@ -1,4 +1,5 @@
 load 'Sentencer.rb'
+require 'pp'
 
 class Memory
   
@@ -34,7 +35,15 @@ class Memory
       _, @subject = pattern
       components = what_has?(@subject)
       first_part = "#{a_or_an(@subject).capitalize} #{@subject} has "
-      second_part = (components.size == 0 ? "nothing" : components.join(", "))
+      if components.size == 0
+        second_part =  "nothing"
+      else
+        a = []
+        components.each do |c|
+          a.push("#{c[:count]} #{c[:component]}")
+        end
+        second_part = a.join(", ")
+      end
       return first_part + second_part
     
     when :is_a_question
@@ -56,11 +65,14 @@ class Memory
       end
     
     when :define_component
-      _, @subject, component = pattern
+      _, @subject, count, component = pattern
+      puts "Count: #{count}, component: #{component}"
       if @components.has_key?(@subject)
-        @components[@subject].push(component)
+        @components[@subject].push({ :component => component, :count => count })
       else
-        @components[@subject] = Array(component)
+        a = []
+        a.push({ :component => component, :count => count })
+        @components[@subject] = a
       end
       if what_is?(component) == :not_defined
         "OK, what is #{a_or_an(component)} #{component}?"
