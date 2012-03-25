@@ -156,15 +156,20 @@ class Memory
   
   def has?(subject, target)
     things = @components[subject]
-    if Array(things).include?(target)
-      return true
-    else
-      definition = @classes[subject] # does the super class have it?
-      if definition == nil
-        false
-      else 
-        has?(definition, target) 
+    
+    if things != nil
+      things.each do |t|
+        if(t[:component] == target)
+          return true
+        end
       end
+    end
+    
+    definition = @classes[subject] # does the super class have it?
+    if definition == nil # no super class
+      false
+    else 
+      has?(definition, target) 
     end
   end
 
