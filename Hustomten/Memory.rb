@@ -21,6 +21,12 @@ class Memory
       else
         "I don't know"
       end
+    when :what_has_question
+      _, subject = pattern
+      components = what_has?(subject)
+      first_part = "#{a_or_an(subject).capitalize} '#{subject}' has "
+      second_part = (Array(components).size == 0 ? "nothing" : "#{components.size} things: " + components.join(", "))
+      return first_part + second_part
     when :is_a_question
       _, subject, object = pattern
       is?(subject, object) ? "Yes" : "No"
@@ -29,18 +35,22 @@ class Memory
       has?(subject, object) ? "Yes" : "No"
     when :define_class
       _, subject, definition = pattern
+      @classes[subject] = definition
       if what_is?(definition) == :not_defined
-        "First tell me what #{a_or_an(definition)} '#{definition}' is"
+        "OK, please tell me what #{a_or_an(definition)} '#{definition}' is"
       else
-        @classes[subject] = definition
         "OK, got it"
       end
     when :define_component
       _, subject, component = pattern
-      if what_is?(component) == :not_defined
-        "First tell me what #{a_or_an(component)} '#{component}' is"
+      if @components.has_key?(subject)
+        @components[subject].push(component)
       else
-        @components[subject] = component
+        @components[subject] = Array(component)
+      end
+      if what_is?(component) == :not_defined
+        "OK, please tell me what #{a_or_an(component)} '#{component}' is"
+      else
         "OK, got it"
       end
     when :dont_understand
@@ -72,6 +82,26 @@ class Memory
     else
       :not_defined
     end
+  end
+  
+  # Returns an array with all the components that a certain noun and its super classes have
+  def what_has?(noun)
+    components = []
+    all_classes(noun).each do |c|
+      components.push(@components[c])
+    end
+    return components
+  end
+  
+  # Returns an array with all classes that a certain noun is
+  def all_classes(noun)
+    classes = []
+    c = noun
+    while(c != :noun and c != :not_defined)
+      classes.push(c)
+      c = what_is?(c)
+    end
+    return classes
   end
   
   def is?(subject, object)

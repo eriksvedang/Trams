@@ -13,7 +13,11 @@ pre_knowledge = [
   "poodle is dog",
   "legs is noun",
   "animal has legs",
-  "has dog legs"
+  "has dog legs",
+  "eyes is noun",
+  "animal has eyes",
+  "dog has tail",
+  "what has dog",
 ]
 
 pre_knowledge.each do |s|
@@ -24,6 +28,10 @@ while true
   input = gets.chomp
   if input == "q"
     break
+  elsif input == "d"
+    m.dump
+  elsif input == "r"
+    load 'Memory.rb'
   else
     puts m.analyze(input)  
   end
