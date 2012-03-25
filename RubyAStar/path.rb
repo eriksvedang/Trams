@@ -1,7 +1,7 @@
 class Path
   
   def initialize()
-    @steps = 
+    #@steps = 
   end  
   
 end
