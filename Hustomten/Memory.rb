@@ -19,7 +19,7 @@ class Memory
       if definition != :not_defined
         "#{a_or_an(subject).capitalize} '#{subject}' is #{a_or_an(definition)} '#{definition}'"
       else
-        "I don't know what #{a_or_an(subject)} '#{subject}' is"
+        "I don't know"
       end
     when :is_a_question
       _, subject, object = pattern
@@ -29,13 +29,20 @@ class Memory
       has?(subject, object) ? "Yes" : "No"
     when :define_class
       _, subject, definition = pattern
-      if subject == :noun then return "Can't redefine the meaning of noun" end
-      @classes[subject] = definition
-      "OK, got it"
+      if what_is?(definition) == :not_defined
+        "First tell me what #{a_or_an(definition)} '#{definition}' is"
+      else
+        @classes[subject] = definition
+        "OK, got it"
+      end
     when :define_component
-      _, subject, definition = pattern
-      @components[subject] = definition
-      "OK, got it"
+      _, subject, component = pattern
+      if what_is?(component) == :not_defined
+        "First tell me what #{a_or_an(component)} '#{component}' is"
+      else
+        @components[subject] = component
+        "OK, got it"
+      end
     when :dont_understand
       "I don't understand that"
     else

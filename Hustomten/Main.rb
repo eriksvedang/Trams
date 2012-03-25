@@ -8,9 +8,12 @@ load 'Memory.rb'
 m = Memory.new
 
 pre_knowledge = [
-  "poodle is dog",
+  "animal is noun",
   "dog is animal",
-  "animal is noun"
+  "poodle is dog",
+  "legs is noun",
+  "animal has legs",
+  "has dog legs"
 ]
 
 pre_knowledge.each do |s|
