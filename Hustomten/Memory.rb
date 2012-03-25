@@ -2,59 +2,75 @@ load 'Sentencer.rb'
 
 class Memory
   
+  attr_accessor :subject
+  
   def initialize
     @classes = Hash.new # is-a relationships
     @components = Hash.new # has-a relationships
+    @subject = ""
   end
     
-  # Let the memory analyze a string. Returns a string with a message of how it went.
+  # Let the 'Memory' analyze a string. Returns a string with a message of how it went.
   def analyze(s)
     tokens = string_to_symbol_array(s)
+    paste_subject(tokens)
     pattern = get_pattern(tokens)
     type, _ = pattern
+    
     case type
+    when :set_subject
+      _, @subject = pattern
+      
     when :what_is_question
-      _, subject = pattern
-      definition = what_is?(subject)
+      _, @subject = pattern
+      definition = what_is?(@subject)
       if definition != :not_defined
-        "#{a_or_an(subject).capitalize} '#{subject}' is #{a_or_an(definition)} '#{definition}'"
+        "#{a_or_an(@subject).capitalize} #{@subject} is #{a_or_an(definition)} #{definition}"
       else
         "I don't know"
       end
+    
     when :what_has_question
-      _, subject = pattern
-      components = what_has?(subject)
-      first_part = "#{a_or_an(subject).capitalize} '#{subject}' has "
-      second_part = (Array(components).size == 0 ? "nothing" : "#{components.size} things: " + components.join(", "))
+      _, @subject = pattern
+      components = what_has?(@subject)
+      first_part = "#{a_or_an(@subject).capitalize} #{@subject} has "
+      second_part = (components.size == 0 ? "nothing" : components.join(", "))
       return first_part + second_part
+    
     when :is_a_question
-      _, subject, object = pattern
-      is?(subject, object) ? "Yes" : "No"
+      _, @subject, object = pattern
+      is?(@subject, object) ? "Yes" : "No"
+    
     when :has_a_question
-      _, subject, object = pattern
-      has?(subject, object) ? "Yes" : "No"
+      _, @subject, object = pattern
+      has?(@subject, object) ? "Yes" : "No"
+    
     when :define_class
-      _, subject, definition = pattern
-      @classes[subject] = definition
+      _, @subject, definition = pattern
+      if @subject == :noun then return "A noun must be a noun" end
+      @classes[@subject] = definition
       if what_is?(definition) == :not_defined
-        "OK, please tell me what #{a_or_an(definition)} '#{definition}' is"
+        "OK, what is #{a_or_an(definition)} #{definition}?"
       else
-        "OK, got it"
+        "OK"
       end
+    
     when :define_component
-      _, subject, component = pattern
-      if @components.has_key?(subject)
-        @components[subject].push(component)
+      _, @subject, component = pattern
+      if @components.has_key?(@subject)
+        @components[@subject].push(component)
       else
-        @components[subject] = Array(component)
+        @components[@subject] = Array(component)
       end
       if what_is?(component) == :not_defined
-        "OK, please tell me what #{a_or_an(component)} '#{component}' is"
+        "OK, what is #{a_or_an(component)} #{component}?"
       else
-        "OK, got it"
+        "OK"
       end
+   
     when :dont_understand
-      "I don't understand that"
+      "I didn't understand that"
+    
     else
       throw "Did not understand pattern #{pattern}"
     end
@@ -68,6 +84,14 @@ class Memory
       a.push(w.downcase.to_sym)
     end
     return a
+  end
+  
+  def paste_subject(tokens)
+    return if @subject == ""
+    i = tokens.index(:it)
+    if i != nil
+      tokens[i] = @subject
+    end
   end
   
   def a_or_an(word)
@@ -87,8 +111,10 @@ class Memory
   # Returns an array with all the components that a certain noun and its super classes have
   def what_has?(noun)
     components = []
-    all_classes(noun).each do |c|
-      components.push(@components[c])
+    all_classes(noun).each do |class_iterator|
+      Array(@components[class_iterator]).each do |component|
+        components.push(component)
+      end
     end
     return components
   end
@@ -97,8 +123,9 @@ class Memory
   def all_classes(noun)
     classes = []
     c = noun
-    while(c != :noun and c != :not_defined)
+    while(c != :not_defined)
       classes.push(c)
+      break if c == :noun
       c = what_is?(c)
     end
     return classes
@@ -130,8 +157,7 @@ class Memory
   end
 
   def dump
-    puts "Classes: #{@classes}"
-    puts "Components: #{@components}"
+    puts "Classes: #{@classes}\n Components: #{@components}\n Subject: #{@subject}"
   end
   
 end

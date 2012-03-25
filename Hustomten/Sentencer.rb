@@ -6,6 +6,8 @@ def get_pattern(tokens)
   
   if what_pos == 0 && is_pos == 1
     return :what_is_question, tokens[2]
+  elsif tokens.size == 1
+    return :set_subject, tokens[0]
   elsif what_pos == 0 && has_pos == 1
     return :what_has_question, tokens[2]
   elsif is_pos == 0
