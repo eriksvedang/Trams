@@ -6,18 +6,7 @@ load 'Memory.rb'
 #puts "What is the game going to be about?"
 
 m = Memory.new
-
-pre_knowledge = [
-  "wing is noun",
-  "duck has 2 wing",
-  "duck has 3 eye",
-  "what has duck",
-#  "how many wing has duck"
-]
-
-pre_knowledge.each do |s|
-  puts "#{s} = #{m.analyze(s)}"
-end
+m.load("save.txt")
 
 while true
   input = gets.chomp
@@ -27,7 +16,13 @@ while true
     m.dump
   elsif input == "r"
     load 'Memory.rb'
+  elsif input == "s"
+    m.save("save.txt")
+  elsif input == "l"
+    m.load("save.txt")
   else
     puts m.analyze(input)  
   end
 end
+
+m.save("save.txt")

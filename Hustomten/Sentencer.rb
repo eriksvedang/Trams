@@ -19,7 +19,6 @@ def get_pattern(tokens)
   elsif has_pos == 1
     count = tokens[2].to_s.to_i
     if count == 0
-      puts "count is zero"
       return :define_component, tokens[0], 1, tokens[2]
     else
       return :define_component, tokens[0], count, tokens[3]

@@ -1,0 +1,11 @@
+a horse is an animal
+a fish is an animal
+an animal has 2 eyes
+a fish has 5 fins
+a horse has a tail
+a dog is an animal
+an animal is a noun
+crepes is food
+food is noun
+crepes has sugar
+sugar is food

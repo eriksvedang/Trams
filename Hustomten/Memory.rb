@@ -9,10 +9,27 @@ class Memory
     @classes = Hash.new # is-a relationships
     @components = Hash.new # has-a relationships
     @subject = ""
+    @lines = []
+  end
+  
+  def save(filename)
+    file = File.new(filename, "w")
+    @lines.each do |line|
+      file.write("#{line}\n")
+    end
+  end
+  
+  def load(filename)
+    file = File.new(filename, "r")
+    file.each do |line|
+      analyze(line.chomp)
+    end
   end
     
   # Let the 'Memory' analyze a string. Returns a string with a message of how it went.
   def analyze(s)
+    @lines.push(s)
+    return if s == ""
     tokens = string_to_symbol_array(s)
     paste_subject(tokens)
     pattern = get_pattern(tokens)
@@ -21,6 +38,7 @@ class Memory
     case type
     when :set_subject
       _, @subject = pattern
+      "OK, lets talk about #{@subject}"
       
     when :what_is_question
       _, @subject = pattern
@@ -40,7 +58,13 @@ class Memory
       else
         a = []
         components.each do |c|
-          a.push("#{c[:count]} #{c[:component]}")
+          nr = c[:count]
+          name = c[:component]
+          if nr == 1
+            a.push("one #{name}")
+          else
+            a.push("#{nr} #{pluralis(name)}")
+          end
         end
         second_part = a.join(", ")
       end
@@ -66,7 +90,7 @@ class Memory
     
     when :define_component
       _, @subject, count, component = pattern
-      puts "Count: #{count}, component: #{component}"
+      #puts "Count: #{count}, component: #{component}"
       if @components.has_key?(@subject)
         @components[@subject].push({ :component => component, :count => count })
       else
@@ -93,9 +117,16 @@ class Memory
     words = s.split
     a = []
     words.each do |w|
-      a.push(w.downcase.to_sym)
+      symbol = w.downcase.to_sym
+      if !is_a_or_an?(symbol)
+        a.push(symbol)
+      end
     end
     return a
+  end
+  
+  def is_a_or_an?(symbol)
+    return ((symbol == :a) or (symbol == :an))
   end
   
   def paste_subject(tokens)
@@ -104,6 +135,10 @@ class Memory
     if i != nil
       tokens[i] = @subject
     end
+  end
+  
+  def pluralis(word)
+    if word.to_s[word.size - 1] == 's' then return word else return word.to_s + 's' end
   end
   
   def a_or_an(word)
