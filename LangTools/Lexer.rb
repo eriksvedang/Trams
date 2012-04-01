@@ -20,7 +20,7 @@ class Lexer
     }
     return tokens
   end
-
+  private
   # string -> token_type
   def analyze(word)
     special = @specials[word]
