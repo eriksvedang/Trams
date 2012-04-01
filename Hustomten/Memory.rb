@@ -39,7 +39,7 @@ class Memory
     when :set_subject
       _, @subject = pattern
       "OK, lets talk about #{@subject}"
-      
+
     when :what_is_question
       _, @subject = pattern
       definition = what_is?(@subject)

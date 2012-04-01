@@ -8,6 +8,8 @@ load 'Memory.rb'
 m = Memory.new
 m.load("save.txt")
 
+system("clear")
+
 while true
   input = gets.chomp
   if input == "q"

@@ -1,7 +1,6 @@
 a horse is an animal
 a fish is an animal
 an animal has 2 eyes
-a fish has 5 fins
 a horse has a tail
 a dog is an animal
 an animal is a noun
@@ -9,3 +8,23 @@ crepes is food
 food is noun
 crepes has sugar
 sugar is food
+what is a horse
+what has a horse
+what is a horse
+what is an animal
+what is a noun
+what is a dog
+what is fido
+Fido is a dog
+is Fido an animal
+is fido a horse
+what has an horse
+fido has an owner
+owner is human
+it is a noun
+what has fido
+animal has tail
+tail is noun
+fido has a blargh
+what has fido
+horse has owner
