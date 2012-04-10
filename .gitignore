@@ -1,1 +1,3 @@
 *.app
+.cake
+Closet/native
