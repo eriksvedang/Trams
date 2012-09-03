@@ -36,11 +36,12 @@
 				(apply fill (color-func x y))
 				(rect (* x step) (* y step) step step))))
 
-(defsketch example                
+(defn run-sketch []
+	(defsketch example                
 	:title "SQUARES!"
 	:setup setup
 	:draw draw         
-	:size [400 300])
+	:size [300 300]))
 
 (defn -main []
 	(println "Starting..."))

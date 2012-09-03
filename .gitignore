@@ -1,3 +1,6 @@
 *.app
 .cake
 Closet/native
+Closet/target
+Gejmz/native
+Gejmz/target
