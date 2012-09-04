@@ -51,8 +51,13 @@
 
 
 
+; P08 (**) Eliminate consecutive duplicates of list elements.
 
 
 
 
+; P09 (**) Pack consecutive duplicates of list elements into sublists.
 
+
+
+; P10 (*) Run-length encoding of a list.
